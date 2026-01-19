@@ -31,7 +31,8 @@ let
       EnvironmentFile = cfg.environmentFile;
       ExecStart = lib.concatStringsSep " \\\n " (
         [
-          "${pkgs.k3s}/bin/k3s server --rootless"
+          # The wrapper swallows PATH for some reason
+          "${pkgs.k3s}/bin/.k3s-wrapped server --rootless"
         ]
         ++ (lib.optional (cfg.configPath != null) "--config ${cfg.configPath}")
         ++ cfg.extraFlags
