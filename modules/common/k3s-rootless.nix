@@ -113,7 +113,10 @@ in {
         path = with pkgs; [
           nerdctl
           slirp4netns
-          # Need access to newuidmap from "/run/wrappers"
+          util-linux   # for nsenter
+          iproute2     # for ip
+          iptables     # for firewalling
+          # Need access to newuidmap from "/run/wrappers/bin"
           "/run/wrappers"
         ];
 
