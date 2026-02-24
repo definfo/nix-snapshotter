@@ -31,6 +31,32 @@
     nix-snapshotter = self.callPackage ../../package.nix {
       inherit (inputs) globset;
     };
+
+    k3s = super.k3s_1_34.override {
+      buildGoModule = args:
+        let
+          isFunc = builtins.isFunction args;
+          shouldPatch = !isFunc && 
+                        args.pname != "k3s-cni-plugins" && 
+                        args.pname != "k3s-containerd";
+          
+          patchedSrc = super.runCommand "k3s-patched-src" {} ''
+            cp -r ${args.src} $out
+            chmod -R u+w $out
+            cd $out
+            patch -p1 < ${./patches/k3s-nix-snapshotter.patch}
+          '';
+        in
+          if shouldPatch then
+            super.buildGoModule (args // {
+              src = patchedSrc;
+              vendorHash = {
+                "sha256-IJi5gVxBsAjeQHi5rQpNRvWOXuNPx2Rtsy18VL+2Yxo=" = "sha256-Y3Dc/aWNpiNxDaJb3RAudwN7Ep6WdhSCQmtjt1pNk1w=";
+              }.${args.vendorHash};
+            })
+          else
+            super.buildGoModule args;
+    };
   };
 
   perSystem =
