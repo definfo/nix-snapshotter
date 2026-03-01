@@ -105,10 +105,10 @@ index aadf6c0..b11e739 100644
    {{ if .NodeConfig.DefaultRuntime }}default_runtime_name = "{{ .NodeConfig.DefaultRuntime }}"{{end}}
  {{ if eq .NodeConfig.AgentConfig.Snapshotter "stargz" }}
  {{ if .NodeConfig.AgentConfig.ImageServiceSocket }}
-@@ -109,6 +109,17 @@ enable_keychain = true
+@@ -109,6 +109,25 @@ enable_keychain = true
  {{end}}
  {{end}}
- 
+
 +{{ if eq .NodeConfig.AgentConfig.Snapshotter "nix" }}
 +{{ if .NodeConfig.AgentConfig.ImageServiceSocket }}
 +[plugins."io.containerd.snapshotter.v1.nix"]
@@ -117,6 +117,14 @@ index aadf6c0..b11e739 100644
 +[plugins."io.containerd.snapshotter.v1.nix".image_service]
 +  enable = true
 +  containerd_address = {{ deschemify .NodeConfig.Containerd.Address | printf "%q" }}
++
++[[plugins."io.containerd.transfer.v1.local".unpack_config]]
++  platform = "linux/amd64"
++  snapshotter = "nix"
++
++[[plugins."io.containerd.transfer.v1.local".unpack_config]]
++  platform = "linux/arm64"
++  snapshotter = "nix"
 +{{end}}
 +{{end}}
 +
@@ -132,7 +140,7 @@ index aadf6c0..b11e739 100644
    use_local_image_pull = true
  {{ end }}
  
-@@ -274,6 +285,17 @@ state = {{ printf "%q" .NodeConfig.Containerd.State }}
+@@ -274,6 +293,25 @@ state = {{ printf "%q" .NodeConfig.Containerd.State }}
  {{ end }}
  {{ end }}
  {{ end }}
@@ -145,6 +153,14 @@ index aadf6c0..b11e739 100644
 +[plugins.'io.containerd.snapshotter.v1.nix'.image_service]
 +  enable = true
 +  containerd_address = {{ deschemify $.NodeConfig.Containerd.Address | printf "%q" }}
++
++[[plugins.'io.containerd.transfer.v1.local'.unpack_config]]
++  platform = "linux/amd64"
++  snapshotter = "nix"
++
++[[plugins.'io.containerd.transfer.v1.local'.unpack_config]]
++  platform = "linux/arm64"
++  snapshotter = "nix"
 +{{ end }}
 +{{ end }}
  `
