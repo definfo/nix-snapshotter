@@ -93,7 +93,7 @@ index 6e5ebcd..c915a1e 100644
 +	return pkgerrors.WithMessagef(util3.ErrUnsupportedPlatform, "nix is not supported")
 +}
 diff --git a/pkg/agent/templates/templates.go b/pkg/agent/templates/templates.go
-index aadf6c0..c1c6ba2 100644
+index aadf6c0..b11e739 100644
 --- a/pkg/agent/templates/templates.go
 +++ b/pkg/agent/templates/templates.go
 @@ -82,7 +82,7 @@ state = {{ printf "%q" .NodeConfig.Containerd.State }}
@@ -105,7 +105,7 @@ index aadf6c0..c1c6ba2 100644
    {{ if .NodeConfig.DefaultRuntime }}default_runtime_name = "{{ .NodeConfig.DefaultRuntime }}"{{end}}
  {{ if eq .NodeConfig.AgentConfig.Snapshotter "stargz" }}
  {{ if .NodeConfig.AgentConfig.ImageServiceSocket }}
-@@ -109,6 +109,16 @@ enable_keychain = true
+@@ -109,6 +109,17 @@ enable_keychain = true
  {{end}}
  {{end}}
  
@@ -116,13 +116,14 @@ index aadf6c0..c1c6ba2 100644
 +
 +[plugins."io.containerd.snapshotter.v1.nix".image_service]
 +  enable = true
++  containerd_address = {{ deschemify .NodeConfig.Containerd.Address | printf "%q" }}
 +{{end}}
 +{{end}}
 +
  {{- if or .NodeConfig.AgentConfig.CNIBinDir .NodeConfig.AgentConfig.CNIConfDir }}
  [plugins."io.containerd.grpc.v1.cri".cni]
    {{ if .NodeConfig.AgentConfig.CNIBinDir }}bin_dir = {{ printf "%q" .NodeConfig.AgentConfig.CNIBinDir }}{{end}}
-@@ -190,7 +200,7 @@ state = {{ printf "%q" .NodeConfig.Containerd.State }}
+@@ -190,7 +201,7 @@ state = {{ printf "%q" .NodeConfig.Containerd.State }}
  {{ with .NodeConfig.AgentConfig.Snapshotter }}
  [plugins.'io.containerd.cri.v1.images']
    snapshotter = "{{ . }}"
@@ -131,7 +132,7 @@ index aadf6c0..c1c6ba2 100644
    use_local_image_pull = true
  {{ end }}
  
-@@ -274,6 +284,16 @@ state = {{ printf "%q" .NodeConfig.Containerd.State }}
+@@ -274,6 +285,17 @@ state = {{ printf "%q" .NodeConfig.Containerd.State }}
  {{ end }}
  {{ end }}
  {{ end }}
@@ -143,6 +144,7 @@ index aadf6c0..c1c6ba2 100644
 +
 +[plugins.'io.containerd.snapshotter.v1.nix'.image_service]
 +  enable = true
++  containerd_address = {{ deschemify $.NodeConfig.Containerd.Address | printf "%q" }}
 +{{ end }}
 +{{ end }}
  `
