@@ -142,7 +142,7 @@ index aadf6c0..b11e739 100644
    use_local_image_pull = true
  {{ end }}
  
-@@ -274,6 +295,27 @@ state = {{ printf "%q" .NodeConfig.Containerd.State }}
+@@ -274,6 +295,32 @@ state = {{ printf "%q" .NodeConfig.Containerd.State }}
  {{ end }}
  {{ end }}
  {{ end }}
@@ -166,6 +166,11 @@ index aadf6c0..b11e739 100644
 +  snapshotter = "nix"
 +  differ = "walking"
 +{{ end }}
++{{ end }}
++
++{{ if .IsRunningInUserNS }}
++[plugins.'io.containerd.nri.v1.nri']
++  disable = true
 +{{ end }}
  `
  
