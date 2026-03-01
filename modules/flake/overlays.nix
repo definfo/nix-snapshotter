@@ -51,7 +51,10 @@
             super.buildGoModule (args // {
               src = patchedSrc;
               vendorHash = {
+                # k3s 1.34.2+k3s1
                 "sha256-IJi5gVxBsAjeQHi5rQpNRvWOXuNPx2Rtsy18VL+2Yxo=" = "sha256-Y3Dc/aWNpiNxDaJb3RAudwN7Ep6WdhSCQmtjt1pNk1w=";
+                # k3s 1.34.3+k3s3
+                "sha256-R8QXwXmTKsONsbWaedFNDPdYZ82jaQ/T8S9sllqKPjk=" = "sha256-IaWUzoMAye85cNkjE5ISJkDujO6PsSsKy8l1CH7SimY=";
               }.${args.vendorHash};
             })
           else
