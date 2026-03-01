@@ -45,7 +45,7 @@ index 4f4a227..6b1592c 100644
 +			return pkgerrors.WithMessagef(err, "\"nix\" snapshotter cannot be enabled for %q, try using \"overlayfs\" or \"native\"",
 +				nodeConfig.Containerd.Root)
 +		}
-+		nodeConfig.AgentConfig.ImageServiceSocket = "/run/nix-snapshotter/nix-snapshotter.sock"
++		nodeConfig.AgentConfig.ImageServiceSocket = filepath.Join(nodeConfig.Containerd.State, "nix-snapshotter.sock")
  	}
  
  	return nil
@@ -105,7 +105,7 @@ index aadf6c0..b11e739 100644
    {{ if .NodeConfig.DefaultRuntime }}default_runtime_name = "{{ .NodeConfig.DefaultRuntime }}"{{end}}
  {{ if eq .NodeConfig.AgentConfig.Snapshotter "stargz" }}
  {{ if .NodeConfig.AgentConfig.ImageServiceSocket }}
-@@ -109,6 +109,25 @@ enable_keychain = true
+@@ -109,6 +109,27 @@ enable_keychain = true
  {{end}}
  {{end}}
 
@@ -121,17 +121,19 @@ index aadf6c0..b11e739 100644
 +[[plugins."io.containerd.transfer.v1.local".unpack_config]]
 +  platform = "linux/amd64"
 +  snapshotter = "nix"
++  differ = "walking"
 +
 +[[plugins."io.containerd.transfer.v1.local".unpack_config]]
 +  platform = "linux/arm64"
 +  snapshotter = "nix"
++  differ = "walking"
 +{{end}}
 +{{end}}
 +
  {{- if or .NodeConfig.AgentConfig.CNIBinDir .NodeConfig.AgentConfig.CNIConfDir }}
  [plugins."io.containerd.grpc.v1.cri".cni]
    {{ if .NodeConfig.AgentConfig.CNIBinDir }}bin_dir = {{ printf "%q" .NodeConfig.AgentConfig.CNIBinDir }}{{end}}
-@@ -190,7 +201,7 @@ state = {{ printf "%q" .NodeConfig.Containerd.State }}
+@@ -190,7 +203,7 @@ state = {{ printf "%q" .NodeConfig.Containerd.State }}
  {{ with .NodeConfig.AgentConfig.Snapshotter }}
  [plugins.'io.containerd.cri.v1.images']
    snapshotter = "{{ . }}"
@@ -140,7 +142,7 @@ index aadf6c0..b11e739 100644
    use_local_image_pull = true
  {{ end }}
  
-@@ -274,6 +293,25 @@ state = {{ printf "%q" .NodeConfig.Containerd.State }}
+@@ -274,6 +295,27 @@ state = {{ printf "%q" .NodeConfig.Containerd.State }}
  {{ end }}
  {{ end }}
  {{ end }}
@@ -157,10 +159,12 @@ index aadf6c0..b11e739 100644
 +[[plugins.'io.containerd.transfer.v1.local'.unpack_config]]
 +  platform = "linux/amd64"
 +  snapshotter = "nix"
++  differ = "walking"
 +
 +[[plugins.'io.containerd.transfer.v1.local'.unpack_config]]
 +  platform = "linux/arm64"
 +  snapshotter = "nix"
++  differ = "walking"
 +{{ end }}
 +{{ end }}
  `
