@@ -112,6 +112,7 @@ in {
       {
         path = with pkgs; [
           nerdctl
+          runc         # OCI runtime (wrapper adds it, but we bypass wrapper)
           slirp4netns
           util-linux   # for nsenter
           iproute2     # for ip
