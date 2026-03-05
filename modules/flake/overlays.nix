@@ -36,10 +36,10 @@
       buildGoModule = args:
         let
           isFunc = builtins.isFunction args;
-          shouldPatch = !isFunc && 
-                        args.pname != "k3s-cni-plugins" && 
+          shouldPatch = !isFunc &&
+                        args.pname != "k3s-cni-plugins" &&
                         args.pname != "k3s-containerd";
-          
+
           patchedSrc = super.runCommand "k3s-patched-src" {} ''
             cp -r ${args.src} $out
             chmod -R u+w $out
@@ -56,6 +56,13 @@
                 # k3s 1.34.3+k3s3
                 "sha256-R8QXwXmTKsONsbWaedFNDPdYZ82jaQ/T8S9sllqKPjk=" = "sha256-IaWUzoMAye85cNkjE5ISJkDujO6PsSsKy8l1CH7SimY=";
               }.${args.vendorHash};
+              # Patch vendored containerd: treat ErrNotFound in checkpoint
+              # detection as "not a checkpoint image" instead of a hard error.
+              # This fixes a race where the CRI image store hasn't been
+              # populated yet when CreateContainer runs.
+              preBuild = (args.preBuild or "") + ''
+                patch --forward -p1 < ${./patches/containerd-checkpoint-not-found.patch} || true
+              '';
             })
           else
             super.buildGoModule args;
