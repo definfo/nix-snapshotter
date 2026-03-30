@@ -2,7 +2,7 @@ diff --git a/go.mod b/go.mod
 index 44c4842..90d0380 100644
 --- a/go.mod
 +++ b/go.mod
-@@ -124,6 +124,7 @@ require (
+@@ -124,1 +124,2 @@ require (
 +	github.com/pdtpartners/nix-snapshotter v0.4.0
  	github.com/pkg/errors v0.9.1
 diff --git a/go.sum b/go.sum
