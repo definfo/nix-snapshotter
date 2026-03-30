@@ -57,6 +57,8 @@
                 "sha256-R8QXwXmTKsONsbWaedFNDPdYZ82jaQ/T8S9sllqKPjk=" = "sha256-IaWUzoMAye85cNkjE5ISJkDujO6PsSsKy8l1CH7SimY=";
                 # k3s 1.34.4+k3s1
                 "sha256-ZTRcv28rgKslrDRr5y8SnQJpo2ErbURa22l1nv+4QHw=" = "sha256-OK79hUWRJ8MvvMyy0vts6Bu8gudEANHQ9YAemZfXrsw=";
+                # k3s 1.34.5+k3s1
+                "sha256-q3/KylcuuhUMC3ggpR8DsLjdWgtPnhCqa1HjM2sgHuo=" = "sha256-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=";
               }.${args.vendorHash};
               # Patch vendored containerd: treat ErrNotFound in checkpoint
               # detection as "not a checkpoint image" instead of a hard error.
