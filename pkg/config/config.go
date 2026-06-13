@@ -5,6 +5,7 @@ import (
 	"errors"
 	"fmt"
 	"os"
+	"path/filepath"
 
 	"dario.cat/mergo"
 	"github.com/containerd/log"
@@ -12,10 +13,26 @@ import (
 )
 
 var (
-	defaultAddress           = "/run/nix-snapshotter/nix-snapshotter.sock"
-	defaultRoot              = "/var/lib/containerd/io.containerd.snapshotter.v1.nix"
-	defaultContainerdAddress = "/run/containerd/containerd.sock"
+	defaultAddress            = "/run/nix-snapshotter/nix-snapshotter.sock"
+	defaultRoot               = "/var/lib/containerd/io.containerd.snapshotter.v1.nix"
+	defaultContainerdAddress  = "/run/containerd/containerd.sock"
+	defaultRootlessAddress    = "/run/user/" + userID() + "/containerd/nix-snapshotter.sock"
+	defaultRootlessRoot       = userDataDir() + "/containerd/io.containerd.snapshotter.v1.nix"
+	defaultRootlessCtrAddress = "/run/user/" + userID() + "/containerd/containerd.sock"
 )
+
+// userID returns the current user's UID as a string for XDG runtime paths.
+func userID() string {
+	return fmt.Sprintf("%d", os.Getuid())
+}
+
+// userDataDir returns the user data directory following XDG Base Directory specification.
+func userDataDir() string {
+	if xdg := os.Getenv("XDG_DATA_HOME"); xdg != "" {
+		return xdg
+	}
+	return filepath.Join(os.Getenv("HOME"), ".local/share")
+}
 
 // Config provides nix-snapshotter configuration data.
 type Config struct {
@@ -30,8 +47,20 @@ type ImageServiceConfig struct {
 	ContainerdAddress string `toml:"containerd_address"`
 }
 
-// New returns a default config.
+// New returns a default config suitable for the current user
+// (rootful or rootless).
 func New() *Config {
+	// Detect rootless mode: if running as non-root, use XDG-style paths.
+	if os.Getuid() != 0 {
+		return &Config{
+			Address: defaultRootlessAddress,
+			Root:    defaultRootlessRoot,
+			ImageService: ImageServiceConfig{
+				Enable:            true,
+				ContainerdAddress: defaultRootlessCtrAddress,
+			},
+		}
+	}
 	return &Config{
 		Address: defaultAddress,
 		Root:    defaultRoot,

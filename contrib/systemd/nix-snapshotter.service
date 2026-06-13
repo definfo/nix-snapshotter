@@ -1,0 +1,26 @@
+[Unit]
+Description=nix-snapshotter - containerd snapshotter that understands nix store paths natively
+Documentation=https://github.com/pdtpartners/nix-snapshotter
+After=network.target containerd.service
+PartOf=containerd.service
+
+[Service]
+Type=notify
+Delegate=yes
+KillMode=mixed
+Restart=always
+RestartSec=2
+
+# Ensure nix-store is in PATH for GC root creation and substitution.
+# Multi-user Nix installs place binaries in /nix/var/nix/profiles/default/bin.
+# Single-user installs use ~/.nix-profile/bin (adjust accordingly).
+Environment="PATH=/nix/var/nix/profiles/default/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
+
+StateDirectory=nix-snapshotter
+RuntimeDirectory=nix-snapshotter
+RuntimeDirectoryPreserve=yes
+
+ExecStart=/usr/local/bin/nix-snapshotter --config /etc/nix-snapshotter/config.toml
+
+[Install]
+WantedBy=multi-user.target

@@ -23,8 +23,22 @@ import (
 
 var (
 	defaultLogLevel   = logrus.InfoLevel
-	defaultConfigPath = "/etc/nix-snapshotter/config.toml"
+	defaultConfigPath string
 )
+
+func init() {
+	if os.Getuid() != 0 {
+		// Rootless: prefer XDG_CONFIG_HOME, fallback to ~/.config
+		if xdg := os.Getenv("XDG_CONFIG_HOME"); xdg != "" {
+			defaultConfigPath = filepath.Join(xdg, "nix-snapshotter", "config.toml")
+		} else {
+			home, _ := os.UserHomeDir()
+			defaultConfigPath = filepath.Join(home, ".config", "nix-snapshotter", "config.toml")
+		}
+	} else {
+		defaultConfigPath = "/etc/nix-snapshotter/config.toml"
+	}
+}
 
 func main() {
 	if err := App().Run(os.Args); err != nil {

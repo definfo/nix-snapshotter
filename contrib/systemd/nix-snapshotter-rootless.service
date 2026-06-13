@@ -1,0 +1,29 @@
+[Unit]
+Description=nix-snapshotter - containerd snapshotter that understands nix store paths natively (Rootless)
+Documentation=https://github.com/pdtpartners/nix-snapshotter
+After=containerd.service
+PartOf=containerd.service
+
+[Service]
+Type=notify
+Delegate=yes
+KillMode=mixed
+Restart=always
+RestartSec=2
+
+# Ensure nix-store is in PATH for GC root creation and substitution.
+# For single-user installs, adjust to include ~/.nix-profile/bin.
+# For multi-user installs, /nix/var/nix/profiles/default/bin is sufficient.
+Environment="PATH=%h/.nix-profile/bin:/nix/var/nix/profiles/default/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
+
+# When running as non-root, nix-snapshotter defaults to XDG-compliant paths:
+#   address         = /run/user/<UID>/containerd/nix-snapshotter.sock
+#   root            = ~/.local/share/containerd/io.containerd.snapshotter.v1.nix
+#   containerd_addr = /run/user/<UID>/containerd/containerd.sock
+#   config path     = ~/.config/nix-snapshotter/config.toml
+# Only specify --config if you need to override these defaults.
+# ExecStart=/usr/local/bin/nix-snapshotter --config %h/.config/nix-snapshotter/config.toml
+ExecStart=/usr/local/bin/nix-snapshotter
+
+[Install]
+WantedBy=default.target
