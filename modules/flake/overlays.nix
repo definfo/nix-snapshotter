@@ -1,4 +1,5 @@
 { self, inputs, ... }:
+
 {
   # Provide overlay to add `nix-snapshotter`.
   flake.overlays.default = self: super: {
@@ -49,6 +50,14 @@
         patchVendoredContainerd;
   };
 
+  flake.overlays.go2nix = self: super: {
+    inherit (inputs.go2nix.packages.${self.stdenv.hostPlatform.system}) go2nix;
+    goEnv = inputs.go2nix.lib.mkGoEnv {
+      inherit (self) go go2nix callPackage;
+      nixPackage = self.nixVersions.nix_2_34; # Nix >= 2.34 is required
+    };
+  };
+
   perSystem =
     { system, ... }:
     {
@@ -56,7 +65,10 @@
         inherit system;
         # Apply default overlay to provide nix-snapshotter for NixOS tests &
         # configurations.
-        overlays = [ self.overlays.default ];
+        overlays = [
+          self.overlays.default
+          self.overlays.go2nix
+        ];
       };
     };
 }

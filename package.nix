@@ -1,5 +1,6 @@
 { lib
-, buildGoModule
+, goEnv
+, symlinkJoin
 , closureInfo
 , globset
 , runCommand
@@ -8,9 +9,10 @@
 }:
 
 let
-  nix-snapshotter = buildGoModule {
+  version = "0.3.0";
+  nix-snapshotter-drv = goEnv.buildGoApplicationExperimental {
     pname = "nix-snapshotter";
-    version = "0.3.0";
+    inherit version;
     src = lib.fileset.toSource {
       root = ./.;
       fileset = globset.lib.globs ./. [
@@ -20,8 +22,12 @@ let
         "go.sum"
       ];
     };
-    vendorHash = "sha256-mWMkDALQ3QvDxgw1Nf0bgWYqeOFDUYKg3UNurNJdD9I=";
+    goLock = ./go2nix.toml;
     passthru = { inherit buildImage; };
+  };
+  nix-snapshotter = symlinkJoin {
+    name = "nix-snapshotter-${version}";
+    paths = [ nix-snapshotter-drv.target ];
   };
 
   # buildImage is analogous to the `docker build` command, in that it can be

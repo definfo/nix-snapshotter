@@ -27,6 +27,13 @@
         runc
         slirp4netns
         nerdctl
+
+        go-tools
+        govulncheck
+        go-junit-report
+        go-task
+        go-mod-upgrade
+        go2nix
       ] ++ nix-snapshotter.nativeBuildInputs;
     };
   };
