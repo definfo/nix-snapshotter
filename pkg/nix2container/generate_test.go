@@ -18,7 +18,6 @@ import (
 	"github.com/containerd/containerd/v2/plugins/content/local"
 	specs "github.com/opencontainers/image-spec/specs-go"
 	ocispec "github.com/opencontainers/image-spec/specs-go/v1"
-	v1 "github.com/opencontainers/image-spec/specs-go/v1"
 	"github.com/pdtpartners/nix-snapshotter/pkg/testutil"
 	"github.com/pdtpartners/nix-snapshotter/types"
 	"github.com/stretchr/testify/require"
@@ -63,7 +62,7 @@ func TestInitializeManifest(t *testing.T) {
 				Versioned: specs.Versioned{
 					SchemaVersion: 2,
 				},
-				Layers: []v1.Descriptor{
+				Layers: []ocispec.Descriptor{
 					{
 						MediaType: "application/vnd.oci.image.layer.v1.tar",
 					},

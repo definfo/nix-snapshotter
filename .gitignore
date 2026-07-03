@@ -21,5 +21,8 @@ nixos.qcow2
 # direnv
 .direnv/
 
+# git-hooks.nix generated config
+.pre-commit-config.flake.yaml
+
 # nix-snapshotter
 build/

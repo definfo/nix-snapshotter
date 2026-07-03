@@ -386,6 +386,6 @@ func testSnapshotterOverlayRead(t *testing.T, newSnapshotter testsuite.Snapshott
 func IsIdentical(t *testing.T, x interface{}, y interface{}) {
 	diff := cmp.Diff(x, y)
 	if diff != "" {
-		t.Fatalf(diff)
+		t.Fatal(diff)
 	}
 }

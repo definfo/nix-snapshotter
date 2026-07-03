@@ -17,7 +17,7 @@ import (
 )
 
 var (
-	ErrNotInitialized = errors.New("Nix-snapshotter Image Service not yet initialized")
+	ErrNotInitialized = errors.New("nix-snapshotter image service not yet initialized")
 )
 
 // ImageServiceConfig is used to configure the image service instance.

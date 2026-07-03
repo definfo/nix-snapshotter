@@ -26,6 +26,7 @@
   "github.com/docker/cli@v29.6.1+incompatible" = "sha256-R355dChAa0OU5bV4O+WVnFptQ86pjepPmBW7XLRjLww="
   "github.com/docker/docker-credential-helpers@v0.9.8" = "sha256-K32+C3y8vrrAbQki/mZrMlK6NyEwszidYfVhh0A5k2U="
   "github.com/docker/docker@v28.5.2+incompatible" = "sha256-M8Q4m6vNbxKVpmEyYXwBnGinWvnN2LyH84zH73dDClE="
+  "github.com/docker/go-units@v0.5.0" = "sha256-iK/V/jJc+borzqMeqLY+38Qcts2KhywpsTk95++hImE="
   "github.com/felixge/httpsnoop@v1.1.0" = "sha256-oePAjhI+dYRrMQAeUWnJ3o+PdHFU1tk1Z/R3/kGdjnw="
   "github.com/go-logr/logr@v1.4.3" = "sha256-Nnp/dEVNMxLp3RSPDHZzGbI8BkSNuZMX0I0cjWKXXLA="
   "github.com/go-logr/stdr@v1.2.2" = "sha256-rRweAP7XIb4egtT1f2gkz4sYOu7LDHmcJ5iNsJUd0sE="

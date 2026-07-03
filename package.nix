@@ -23,11 +23,11 @@ let
       ];
     };
     goLock = ./go2nix.toml;
-    passthru = { inherit buildImage; };
   };
   nix-snapshotter = symlinkJoin {
     name = "nix-snapshotter-${version}";
     paths = [ nix-snapshotter-drv.target ];
+    passthru = { inherit buildImage; };
   };
 
   # buildImage is analogous to the `docker build` command, in that it can be
