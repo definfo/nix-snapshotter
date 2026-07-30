@@ -1,6 +1,5 @@
 { lib
-, goEnv
-, symlinkJoin
+, buildGoModule
 , closureInfo
 , globset
 , runCommand
@@ -9,10 +8,9 @@
 }:
 
 let
-  version = "0.3.0";
-  nix-snapshotter-drv = goEnv.buildGoApplicationExperimental {
+  nix-snapshotter = buildGoModule {
     pname = "nix-snapshotter";
-    inherit version;
+    version = "0.3.0";
     src = lib.fileset.toSource {
       root = ./.;
       fileset = globset.lib.globs ./. [
@@ -22,11 +20,7 @@ let
         "go.sum"
       ];
     };
-    goLock = ./go2nix.toml;
-  };
-  nix-snapshotter = symlinkJoin {
-    name = "nix-snapshotter-${version}";
-    paths = [ nix-snapshotter-drv.target ];
+    vendorHash = "sha256-s5PWpqNbNr52sLBKcooVcm+dZ0ZMMebFTmZpM4dzHMA=";
     passthru = { inherit buildImage; };
   };
 

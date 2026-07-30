@@ -7,11 +7,6 @@
       url = "github:pdtpartners/globset";
       inputs.nixpkgs-lib.follows = "nixpkgs";
     };
-    go2nix = {
-      url = "github:numtide/go2nix";
-      inputs.nixpkgs.follows = "nixpkgs";
-      inputs.treefmt-nix.follows = "treefmt-nix";
-    };
     flake-parts = {
       url = "github:hercules-ci/flake-parts";
       inputs.nixpkgs-lib.follows = "nixpkgs";

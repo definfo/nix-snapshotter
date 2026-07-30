@@ -79,29 +79,6 @@
         "type": "github"
       }
     },
-    "go2nix": {
-      "inputs": {
-        "nixpkgs": [
-          "nixpkgs"
-        ],
-        "treefmt-nix": [
-          "treefmt-nix"
-        ]
-      },
-      "locked": {
-        "lastModified": 1781254883,
-        "narHash": "sha256-DHGapGB3CSq0nu8N6wpIrKn5l8W4J7BKrO9iv78h6VE=",
-        "owner": "numtide",
-        "repo": "go2nix",
-        "rev": "ec9bf035ffd85da6620fbda3b6d4032ecbf91e54",
-        "type": "github"
-      },
-      "original": {
-        "owner": "numtide",
-        "repo": "go2nix",
-        "type": "github"
-      }
-    },
     "nixpkgs": {
       "locked": {
         "lastModified": 1782847225,
@@ -124,7 +101,6 @@
         "flake-parts": "flake-parts",
         "git-hooks-nix": "git-hooks-nix",
         "globset": "globset",
-        "go2nix": "go2nix",
         "nixpkgs": "nixpkgs",
         "treefmt-nix": "treefmt-nix"
       }
