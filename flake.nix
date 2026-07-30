@@ -1,14 +1,6 @@
 {
   description = "Containerd snapshotter that understands nix store paths natively.";
 
-  nixConfig = {
-    extra-experimental-features = [
-      "recursive-nix"
-      "ca-derivations"
-      "dynamic-derivations"
-    ];
-  };
-
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-26.05";
     globset = {
